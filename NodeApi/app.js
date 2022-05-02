@@ -3,15 +3,12 @@ const faker = require('faker');
 const _ = require('lodash');
 const app = express();
 
-// name, reviews, language, status,  
+const numReview = (max, min) => Math.floor(Math.random() * (max - min + 1) + min);
 
-// const randomName = faker.name.findName(); // Rowan Nikolaus
-const country = faker.address.country(); // Singapore
-const city = faker.address.city(); // Laverneberg
-const state = faker.address.state(); // West Virginia
-const zipCode =  faker.address.zipCode(); // 57449-4128
-
-
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  next();
+});
 app.listen(3000, () => {
  console.log("Server running on port 3000");
 });
@@ -19,7 +16,7 @@ app.get('/advisors', (req, res) => {
     const count = req.query.count;
     if (!count) {
       return res.status(400).send({
-        errorMsg: 'count query parameter is missing.'
+        errorMsg: 'parameter  ?count= is missing.'
       });
     }
     res.send(
@@ -27,9 +24,14 @@ app.get('/advisors', (req, res) => {
       _.times(count, () => {
         const user = faker.name;
         return {
+          // eslint-disable-next-line jsx-a11y/alt-text
+          avatar: _.sample(['https://i.pravatar.cc/300']),
           firstName: user.firstName(),
           lastName: user.lastName(),
-          jobTitle: user.jobTitle()
+          jobTitle: user.jobTitle(),
+          language: _.sample(['de', 'en','it','pt', 'es']),
+          reviews: numReview(0, 5),
+          status:  _.sample([true, false]),
         };
       })
     );
