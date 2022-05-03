@@ -18,13 +18,13 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 Basic requirements: 
  
--Sort advisors by best and worst reviews.  (ok)
--View online / offline advisors. (ok)
--Filter advisors by language (ok) 
--Add a simple css design responsive but functional responsive. (ok)
--Basic testing (in process)
--Use a node.js server to serve data to the client.  (ok)
--Provide basic documentation: how to run the app (ok).
+- Sort advisors by best and worst reviews.  (ok)
+- View online / offline advisors. (ok)
+- Filter advisors by language (ok) 
+- Add a simple css design responsive but functional responsive. (ok)
+- Basic testing (in process)
+- Use a node.js server to serve data to the client.  (ok)
+- Provide basic documentation: how to run the app (ok).
  
 # Trade-offs 
 
