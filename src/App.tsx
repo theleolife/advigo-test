@@ -1,17 +1,16 @@
+/* eslint-disable jsx-a11y/no-redundant-roles */
 import React, { useEffect, useState } from 'react';
 import './App.css';
 
 const url = 'http://localhost:3001/';
 
 export interface Advisors {
-  avatar?: string;
   firstName?: string,
   lastName?: string,
-  title?: string,
+  jobTitle?: string,
   language?: string,
   reviews: number,
   status?: boolean,
-
 }
 
 function App() {
@@ -26,13 +25,18 @@ function App() {
    setLoad(load + 10);
   };
 
+  // Sort by review
   const sortByReviews = (tf:boolean) => data.sort( (a: Advisors, b:Advisors) =>  {
     let asce  = a.reviews - b.reviews;
     let desc  = b.reviews - a.reviews;
     let ascDecr = tf ? asce : desc;
     return ascDecr;
   });
+
+  // Filterering by language
   const filterBylang = ( lang: string) =>  data.filter( (l: Advisors) => l.language === lang);
+
+  // const onlineOffLine = ( onOFF: boolean) =>  data.filter( (f: Advisors) => f.status === onOFF);
 
   const onChangeValue = (value: any) => {
     setLang(value);
@@ -55,6 +59,18 @@ function App() {
         </select>
       </form>);
   }
+  const getNameAvatar = (n: any) => n.charAt(0).toUpperCase();
+
+  const mapList = (list: any) => list.map( (m: Advisors) => (
+    <div className="card">
+      <div className={m.status ? "avatar online" : "avatar"}><span>{getNameAvatar(m.firstName)}</span></div>
+       <p>{m.firstName} {m.lastName}</p>
+       <p> Expert: {m.jobTitle} </p>
+       <p> Language: {m.language} </p>
+       <p> Review: {m.reviews} </p>
+    </div>
+  ))
+
   useEffect(() => {
     async function call(n: number) {
       let resJson;
@@ -78,19 +94,11 @@ function App() {
       }
     }
     call(load);
+    // console.log('status', onlineOffLine(true));
       // console.log('data', data)
   }, [load, loading]);
 
-  const getNameAvatar = (n: any) => n.charAt(0).toUpperCase();
 
-  let mapList = (list: any) => list.map( (m: Advisors) => (
-    <div className="card">
-      <div className="avatar"><span>{getNameAvatar(m.firstName)}</span></div>
-       <p>{m.firstName} {m.lastName}</p>
-       <p> Language: {m.language} </p>
-       <p> Review: {m.reviews} </p>
-    </div>
-  ))
   return (
     <div className="App">
       <div className="main">
@@ -103,9 +111,11 @@ function App() {
         : <div className="cards"> <p> Loading...</p></div>}
       </div>
       <div className="left"> 
-              <button type="button" className="block" onClick={() => setAll(true)}>All Advisors</button>
-              <button type="button" className="block" onClick={() => setReview(true)}>Best Reviews</button>
-              <button type="button" className="block" onClick={() => setReview(false)}>Worst Reviews</button>
+              <button role="button" className="block" onClick={() => setReview(true)}>Best Reviews</button>
+              <button role="button" className="block" onClick={() => setReview(false)}>Worst Reviews</button>
+              <button role="button" className="block" onClick={() => setAll(true)}>All Advisors</button>
+              <button role="button"  className="block" onClick={loadMoreAdvisors}>Load more...</button>
+
         <>{buttonLang()}</>
         </div>
     </div>

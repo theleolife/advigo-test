@@ -20,12 +20,9 @@ app.get('/advisors', (req, res) => {
       });
     }
     res.send(
-      // eslint-disable-next-line no-undef
       _.times(count, () => {
         const user = faker.name;
         return {
-          // eslint-disable-next-line jsx-a11y/alt-text
-          avatar: _.sample(['https://i.pravatar.cc/300']),
           firstName: user.firstName(),
           lastName: user.lastName(),
           jobTitle: user.jobTitle(),
