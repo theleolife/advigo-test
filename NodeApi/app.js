@@ -9,8 +9,8 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   next();
 });
-app.listen(3000, () => {
- console.log("Server running on port 3000");
+app.listen(3001, () => {
+ console.log("Server running on port 3001");
 });
 app.get('/advisors', (req, res) => {
     const count = req.query.count;

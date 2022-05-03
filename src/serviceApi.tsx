@@ -1,7 +1,6 @@
 
-export const url = 'http://localhost:3000/';
-
 export default interface Advisors {
+        avatar?: string;
         firstName?: string,
         lastName?: string,
         title?: string,

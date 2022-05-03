@@ -1,8 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import Advisors from './serviceApi';
 
-const url = 'http://localhost:3000/';
+const url = 'http://localhost:3001/';
+
+export interface Advisors {
+  avatar?: string;
+  firstName?: string,
+  lastName?: string,
+  title?: string,
+  language?: string,
+  reviews: number,
+  status?: boolean,
+
+}
 
 function App() {
   const [load, setLoad] = useState(10);
@@ -10,29 +20,7 @@ function App() {
   const [all, setAll] = useState(true);
   const [loading, setLoading] = useState(true);
   const [review, setReview] = useState(true);
-  const [lang, setLang] = useState('Filter By Language');
-
-  // const call =  async (n: number) =>{
-  //   let resJson;
-  //   try {
-  //      let response = await fetch(url + 'advisors?count=' + n);;
-  //       resJson = await response.json();
-  //       await new Promise((resolve, reject) => {
-  //                 if(resolve) {    
-  //                     setTimeout(resolve, 1000); 
-  //                     console.log('1 seconds  to load')        
-  //                 } else {    
-  //                     reject('Promise is rejected');  
-  //                 }
-  //             });
-  //   } catch(err) {
-  //     console.log(err);
-  //     throw err;
-  //   } finally {
-  //     setLoading(false);
-  //      setData(resJson);
-  //   }
-  // }
+  const [lang, setLang] = useState('en');
 
   const loadMoreAdvisors = () => {
    setLoad(load + 10);
@@ -57,9 +45,9 @@ function App() {
     const dropdown = Object.keys(removeDuplicatedLang).map((m:any) => <option key={m} value={removeDuplicatedLang[m]}>{removeDuplicatedLang[m]}</option>)
   
     return (<form>
+      <p>Language:</p>
         <select 
           onChange={(e) => onChangeValue(e.target.value)}
-          placeholder="Filter by language"
           value={lang}
         >
             {dropdown}
@@ -90,31 +78,36 @@ function App() {
       }
     }
     call(load);
-      console.log('data', data)
-
+      // console.log('data', data)
   }, [load, loading]);
 
+  const getNameAvatar = (n: any) => n.charAt(0).toUpperCase();
+
   let mapList = (list: any) => list.map( (m: Advisors) => (
-    <p>{m.firstName} - {m.language} - {m.reviews}</p>
+    <div className="card">
+      <div className="avatar"><span>{getNameAvatar(m.firstName)}</span></div>
+       <p>{m.firstName} {m.lastName}</p>
+       <p> Language: {m.language} </p>
+       <p> Review: {m.reviews} </p>
+    </div>
   ))
   return (
     <div className="App">
-      <header className="App-header">
-        {/* <img src={logo} className="App-logo" alt="logo" /> */}
+      <div className="main">
         {!loading ? 
-        <div> 
+        <div className="cards"> 
            {all ? mapList(data && sortByReviews(review)) : mapList(sortByReviews(review) && filterBylang(lang)) }
+           <button type="button" className="block" onClick={loadMoreAdvisors}>Load more...</button>
+
         </div>
-        : <p> Loading...</p>}
-
-      <button type="button" onClick={loadMoreAdvisors}>Load More</button>
-      <button type="button" onClick={() => setAll(true)}>All Advisors</button>
-       <button type="button" onClick={() => setReview(true)}>Best Reviews</button>
-       <button type="button" onClick={() => setReview(false)}>Worst Reviews</button>
-<>{buttonLang()}</>
-
-
-      </header>
+        : <div className="cards"> <p> Loading...</p></div>}
+      </div>
+      <div className="left"> 
+              <button type="button" className="block" onClick={() => setAll(true)}>All Advisors</button>
+              <button type="button" className="block" onClick={() => setReview(true)}>Best Reviews</button>
+              <button type="button" className="block" onClick={() => setReview(false)}>Worst Reviews</button>
+        <>{buttonLang()}</>
+        </div>
     </div>
   );
 }
